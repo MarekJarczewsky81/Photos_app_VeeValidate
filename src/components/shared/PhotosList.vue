@@ -9,29 +9,26 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { defineProps, defineEmits } from 'vue'
 import PhotoSummary from '@/components/layout/PhotoSummary.vue'
 
-export default {
-  name: 'PhotosList',
-  components: {
-    PhotoSummary
-  },
-  props: {
-    photos: {
-      type: Array,
-      required: true
-    }
-  },
-  methods: {
-    handleVote (photoId) {
-      if (photoId) {
-        console.log('PhotosList received vote event for photo:', photoId)
-        this.$emit('vote', photoId)
-      } else {
-        console.error('Received undefined photoId in PhotosList')
-      }
-    }
+// eslint-disable-next-line no-unused-vars
+const props = defineProps({
+  photos: {
+    type: Array,
+    required: true
+  }
+})
+
+const emit = defineEmits(['vote'])
+
+const handleVote = (photoId) => {
+  if (photoId) {
+    console.log('PhotosList received vote event for photo:', photoId)
+    emit('vote', photoId)
+  } else {
+    console.error('Received undefined photoId in PhotosList')
   }
 }
 </script>
