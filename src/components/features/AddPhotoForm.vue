@@ -1,7 +1,7 @@
 <template>
   <Form
     class="add-photo-form"
-    @submit.prevent="handleSubmit"
+    @submit="handleSubmit"
     v-slot="{ errors }">
     <h2>Add photo</h2>
     <Message v-if="isSuccess" severity="success" :closable="false">Success! Your photo has been submitted</Message>
@@ -36,7 +36,7 @@
             v-bind="field"
             type="text"
           />
-          <span class="error-tex">{{ errors.author }}</span>
+          <span class="error-text">{{ errors.author }}</span>
         </Field>
 
         <!-- category -->
@@ -149,14 +149,21 @@ export default {
     isRequired (value) {
       return value ? true : 'This field is required'
     },
-    async handleSubmit () {
+    async handleSubmit (e) {
+      if (e && e.preventDefault) {
+        e.preventDefault()
+      }
+
       this.isSuccess = false
       this.isError = false
+
       if (!this.form.category) {
         console.error('Category is not selected')
         this.isError = true
         return
-      } try {
+      }
+
+      try {
         const formData = new FormData()
         formData.append('title', this.form.title)
         formData.append('author', this.form.author)
@@ -192,17 +199,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.error-text {
-  color: red;
-}
-
-.p-message {
-  margin-bottom: 1rem;
-}
-
 .add-photo-form {
   max-width: 800px;
   margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+h2 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
 }
 
 .form-content {
@@ -214,13 +220,6 @@ export default {
   flex: 1;
 }
 
-.image-upload-container {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-}
-
 .p-field {
   margin-bottom: 1rem;
 }
@@ -228,25 +227,65 @@ export default {
 .p-field label {
   display: block;
   margin-bottom: 0.5rem;
-}
-
-.submit-button {
-  background-color: #4caf50;
-  border: none;
-  color: white;
-  padding: 0.5rem 1rem;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-  cursor: pointer;
-  border-radius: 20px;
+  font-size: 14px;
+  color: #666;
 }
 
 :deep(.p-inputtext),
 :deep(.p-dropdown),
 :deep(.p-textarea) {
   width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+:deep(.p-dropdown) {
+  .p-dropdown-label {
+    padding: 8px;
+  }
+}
+
+:deep(.p-textarea) {
+  min-height: 100px;
+}
+
+.submit-button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin-top: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.image-upload-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+:deep(.image-upload) {
+  border: 2px dashed #ccc;
+  border-radius: 4px;
+  width: 100%;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f9f9f9;
+}
+
+.error-text {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
 }
 </style>

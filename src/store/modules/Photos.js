@@ -18,6 +18,9 @@ export default {
     getSinglePhoto: state => state.singlePhoto
   },
   mutations: {
+    ADD_PHOTOS (state, newPhotos) {
+      state.photos = [...state.photos, ...newPhotos]
+    },
     ADD_PHOTO (state, photo) {
       state.photos.unshift(photo)
     },
